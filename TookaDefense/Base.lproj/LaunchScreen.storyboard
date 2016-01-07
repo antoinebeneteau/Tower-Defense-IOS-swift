@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Llm-lL-Icb"/>
+                        <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="LogoStudio.png" translatesAutoresizingMaskIntoConstraints="NO" id="Svd-g7-Xic">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Svd-g7-Xic" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Bmc-Lp-1FL"/>
+                            <constraint firstItem="Svd-g7-Xic" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="HB9-HG-tYR"/>
+                            <constraint firstItem="Svd-g7-Xic" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="asd-eq-U29"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Svd-g7-Xic" secondAttribute="bottom" id="cOV-NM-jLo"/>
+                            <constraint firstItem="Svd-g7-Xic" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="lhe-uF-4Zg"/>
+                            <constraint firstAttribute="trailing" secondItem="Svd-g7-Xic" secondAttribute="trailing" id="nuY-rg-SiF"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Bmc-Lp-1FL"/>
+                                <exclude reference="HB9-HG-tYR"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="LogoStudio.png" width="1028" height="763"/>
+    </resources>
+</document>
