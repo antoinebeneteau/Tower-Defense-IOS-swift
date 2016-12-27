@@ -34,18 +34,18 @@ var sellButton = SKSpriteNode(imageNamed: "SellButton")
 var recordButton = SKSpriteNode(imageNamed: "RecordButton")
 
 func layoutHUD() {
-	let hudNode = gameLayerNodes[.Hud]!
+	let hudNode = gameLayerNodes[.hud]!
 	
-	baseLabel = hudNode.childNodeWithName("BaseLabel") as! SKLabelNode
+	baseLabel = hudNode.childNode(withName: "BaseLabel") as! SKLabelNode
 	baseLabel.alpha = 0
 	
-	waveLabel = hudNode.childNodeWithName("WaveLabel") as! SKLabelNode
+	waveLabel = hudNode.childNode(withName: "WaveLabel") as! SKLabelNode
 	waveLabel.alpha = 0
 	
-	goldLabel = hudNode.childNodeWithName("GoldLabel") as! SKLabelNode
+	goldLabel = hudNode.childNode(withName: "GoldLabel") as! SKLabelNode
 	goldLabel.alpha = 0
 	
-	diamondLabel = hudNode.childNodeWithName("DiamondLabel") as! SKLabelNode
+	diamondLabel = hudNode.childNode(withName: "DiamondLabel") as! SKLabelNode
 	diamondLabel.alpha = 0
 }
 

@@ -15,27 +15,27 @@ var winScreen: WinNode!
 var loseScreen: LoseNode!
 
 func loadStateScreens() {
-	let readyScenePath: String = NSBundle.mainBundle().pathForResource("MenuScene", ofType: "sks")!
-	let readyScene = NSKeyedUnarchiver.unarchiveObjectWithFile(readyScenePath) as! SKScene
-	readyScreen = (readyScene.childNodeWithName("MainNode"))!.copy() as! ReadyNode
+	let readyScenePath: String = Bundle.main.path(forResource: "MenuScene", ofType: "sks")!
+	let readyScene = NSKeyedUnarchiver.unarchiveObject(withFile: readyScenePath) as! SKScene
+	readyScreen = (readyScene.childNode(withName: "MainNode"))!.copy() as! ReadyNode
 	
-	let levelSelectorScenePath: String = NSBundle.mainBundle().pathForResource("LevelSelector", ofType: "sks")!
-	let levelSelectorScene = NSKeyedUnarchiver.unarchiveObjectWithFile(levelSelectorScenePath) as! SKScene
-	levelSelectorScreen = (levelSelectorScene.childNodeWithName("MainNode"))!.copy() as! LevelSelectorNode
+	let levelSelectorScenePath: String = Bundle.main.path(forResource: "LevelSelector", ofType: "sks")!
+	let levelSelectorScene = NSKeyedUnarchiver.unarchiveObject(withFile: levelSelectorScenePath) as! SKScene
+	levelSelectorScreen = (levelSelectorScene.childNode(withName: "MainNode"))!.copy() as! LevelSelectorNode
 	
-	let winScenePath: String = NSBundle.mainBundle().pathForResource("WinScene", ofType: "sks")!
-	let winScene = NSKeyedUnarchiver.unarchiveObjectWithFile(winScenePath) as! SKScene
-	winScreen = (winScene.childNodeWithName("MainNode"))!.copy() as! WinNode
+	let winScenePath: String = Bundle.main.path(forResource: "WinScene", ofType: "sks")!
+	let winScene = NSKeyedUnarchiver.unarchiveObject(withFile: winScenePath) as! SKScene
+	winScreen = (winScene.childNode(withName: "MainNode"))!.copy() as! WinNode
 	
-	let loseScenePath: String = NSBundle.mainBundle().pathForResource("LoseScene", ofType: "sks")!
-	let loseScene = NSKeyedUnarchiver.unarchiveObjectWithFile(loseScenePath) as! SKScene
-	loseScreen = (loseScene.childNodeWithName("MainNode"))!.copy() as! LoseNode
+	let loseScenePath: String = Bundle.main.path(forResource: "LoseScene", ofType: "sks")!
+	let loseScene = NSKeyedUnarchiver.unarchiveObject(withFile: loseScenePath) as! SKScene
+	loseScreen = (loseScene.childNode(withName: "MainNode"))!.copy() as! LoseNode
 }
 
-func showReady(show: Bool) {
+func showReady(_ show: Bool) {
 	if show {
 		updateHUD()
-		addNode(readyScreen, toGameLayer: .Overlay)
+		addNode(readyScreen, toGameLayer: .overlay)
 		readyScreen.show()
 	}
 	else {
@@ -43,11 +43,11 @@ func showReady(show: Bool) {
 	}
 }
 
-func showLevelSelector(show: Bool) {
+func showLevelSelector(_ show: Bool) {
 	if show {
 		levelSelectorScreen.alpha = 0.0
-		addNode(levelSelectorScreen, toGameLayer: .Overlay)
-		levelSelectorScreen.runAction(SKAction.fadeAlphaTo(1.0, duration: 1.0))
+		addNode(levelSelectorScreen, toGameLayer: .overlay)
+		levelSelectorScreen.run(SKAction.fadeAlpha(to: 1.0, duration: 1.0))
 	} else {
 		levelSelectorScreen.hide()
 	}
@@ -55,13 +55,13 @@ func showLevelSelector(show: Bool) {
 
 func showWin() {
 	winScreen.alpha = 0.0
-	addNode(winScreen, toGameLayer: .Overlay)
-	winScreen.runAction(SKAction.sequence([SKAction.fadeAlphaTo(1.0, duration: 1.0)]))
+	addNode(winScreen, toGameLayer: .overlay)
+	winScreen.run(SKAction.sequence([SKAction.fadeAlpha(to: 1.0, duration: 1.0)]))
 	winScreen.show(levelToLoad, enemy: enemyKilled, money: gold)
 }
 func showLose() {
 	loseScreen.alpha = 0.0
-	addNode(loseScreen, toGameLayer: .Overlay)
-	loseScreen.runAction(SKAction.sequence([SKAction.fadeAlphaTo(1.0, duration: 1.0)]))
+	addNode(loseScreen, toGameLayer: .overlay)
+	loseScreen.run(SKAction.sequence([SKAction.fadeAlpha(to: 1.0, duration: 1.0)]))
 	loseScreen.show(levelToLoad, enemy: enemyKilled, money: gold)
 }

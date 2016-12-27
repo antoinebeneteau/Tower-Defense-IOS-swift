@@ -119,18 +119,22 @@ class EnemyEntity: GKEntity {
 		healthComponent = HealthComponent(parentNode: spriteComponent.node ,barWidth: 100, health: enemyType.health)
 		addComponent(healthComponent)
 	}
+
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
+	}
 	
-	func enemySlowed(slow: Float) {
+	func enemySlowed(_ slow: Float) {
 		slowed = true
 		spriteComponent.node.speed *= CGFloat(slow)
 	}
 	
-	func enemyBoosted(boost: Float) {
+	func enemyBoosted(_ boost: Float) {
 		boosted = true
 		spriteComponent.node.speed *= CGFloat(boost)
 	}
 	
-	func enemyTeleported(toPoint: CGPoint) {
+	func enemyTeleported(_ toPoint: CGPoint) {
 		teleported = true
 		spriteComponent.node.position = toPoint
 	}

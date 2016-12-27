@@ -29,7 +29,7 @@ class AnimationComponent: GKComponent {
 	
 	var animations: [AnimationState: Animation]
 	
-	private(set) var currentAnimation: Animation?
+	fileprivate(set) var currentAnimation: Animation?
 	
 	var requestedAnimationState: AnimationState?
 	
@@ -38,10 +38,15 @@ class AnimationComponent: GKComponent {
 			
 			self.node = node
 			self.animations = animations
+			super.init()
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func updateWithDeltaTime(deltaTime: NSTimeInterval) {
-		super.updateWithDeltaTime(deltaTime)
+	override func update(deltaTime: TimeInterval) {
+		super.update(deltaTime: deltaTime)
 		
 		if let animationState = requestedAnimationState {
 			runAnimationForAnimationState(animationState)
@@ -49,7 +54,7 @@ class AnimationComponent: GKComponent {
 		}
 	}
 	
-	class func animationFromAtlas(type: String, withImageIdentifier: String, forAnimationState animationState: AnimationState,
+	class func animationFromAtlas(_ type: String, withImageIdentifier: String, forAnimationState animationState: AnimationState,
 		repeatTexturesForever: Bool = true) -> Animation {
 			let textureAtlas = SKTextureAtlas(named: "\(type)")
 			var textures = [SKTexture]()
@@ -66,8 +71,8 @@ class AnimationComponent: GKComponent {
 				imagesNumber = textureAtlas.textureNames.count
 				
 			}
-			
-			for var i = 1; i <= imagesNumber; i++ {
+		
+			for i in 1...imagesNumber {
 				let textureName = "\(withImageIdentifier)\(i)"
 				textures.append(textureAtlas.textureNamed(textureName))
 			}
@@ -75,7 +80,7 @@ class AnimationComponent: GKComponent {
 			return Animation(animationState: animationState, textures: textures, repeatTexturesForever: repeatTexturesForever)
 	}
 	
-	private func runAnimationForAnimationState(animationState: AnimationState) {
+	fileprivate func runAnimationForAnimationState(_ animationState: AnimationState) {
 		
 		let actionKey = "Animation"
 		let timePerFrame = 0.1
@@ -88,18 +93,18 @@ class AnimationComponent: GKComponent {
 			return
 		}
 		
-		node.removeActionForKey(actionKey)
+		node.removeAction(forKey: actionKey)
 		
 		let texturesAction: SKAction
 		if animation.repeatTexturesForever {
-			texturesAction = SKAction.repeatActionForever(SKAction.animateWithTextures(animation.textures, timePerFrame: timePerFrame))
+			texturesAction = SKAction.repeatForever(SKAction.animate(with: animation.textures, timePerFrame: timePerFrame))
 		}
 		else {
-			texturesAction = SKAction.animateWithTextures(
-				animation.textures, timePerFrame: timePerFrame)
+			texturesAction = SKAction.animate(
+				with: animation.textures, timePerFrame: timePerFrame)
 		}
 		
-		node.runAction(texturesAction, withKey: actionKey)
+		node.run(texturesAction, withKey: actionKey)
 		
 		currentAnimation = animation
 	}

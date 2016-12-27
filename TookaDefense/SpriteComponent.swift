@@ -9,18 +9,16 @@
 import SpriteKit
 import GameplayKit
 
-class EntityNode: SKSpriteNode {
-	weak var entity: GKEntity!
-}
-
 class SpriteComponent: GKComponent {
 	
-	let node: EntityNode
+	let node: SKSpriteNode
 	
 	init(entity: GKEntity, texture: SKTexture, size: CGSize, name: String) {
-		node = EntityNode(texture: texture, color: SKColor.whiteColor(), size: size)
+		node = SKSpriteNode(texture: texture, color: SKColor.white, size: size)
 		node.name = name
 		node.entity = entity
+		
+		super.init()
 		
 		if name == "Slow" || name == "Boost" || name == "Teleport" || name == "Repair" {
 			node.alpha = 0.7
@@ -29,6 +27,10 @@ class SpriteComponent: GKComponent {
 		if name == "Enemy" {
 			node.zPosition = 1
 		}
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
 	}
 }
 

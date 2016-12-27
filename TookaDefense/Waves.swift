@@ -18,10 +18,10 @@ class WaveManager {
 	
 	let waves: [Wave]
 	
-	let newWaveHandler: (waveNum: Int) -> Void
-	let newEnemyHandler: (mobType: EnemyType) -> Void // importe une fonction pour ajouter un ennemi de tel type
+	let newWaveHandler: (_ waveNum: Int) -> Void
+	let newEnemyHandler: (_ mobType: EnemyType) -> Void // importe une fonction pour ajouter un ennemi de tel type
 	
-	init(waves: [Wave], newWaveHandler: (waveNum: Int) -> Void, newEnemyHandler: (enemyType: EnemyType) -> Void) {
+	init(waves: [Wave], newWaveHandler: @escaping (_ waveNum: Int) -> Void, newEnemyHandler: @escaping (_ enemyType: EnemyType) -> Void) {
 		self.waves = waves
 		self.newWaveHandler = newWaveHandler
 		self.newEnemyHandler = newEnemyHandler
@@ -31,22 +31,23 @@ class WaveManager {
 		if waves.count <= currentWave {
 			return true
 		}
-		self.newWaveHandler(waveNum: currentWave+1)
+		self.newWaveHandler(currentWave+1)
 		
 		let wave = waves[currentWave]
 		currentWaveEnemyCount = wave.enemyCount
 		for m in 1...wave.enemyCount {
 			delay(wave.enemyDelay * Double(m), closure: { () -> () in
-				self.newEnemyHandler(mobType: wave.enemyType)
+				self.newEnemyHandler(wave.enemyType)
 			})
 		}
-		currentWave++
+		currentWave += 1
 		
 		return false
 	}
 	
 	func removeEnemyFromWave() -> Bool {
-		if --currentWaveEnemyCount <= 0 {
+		currentWaveEnemyCount -= 1
+		if currentWaveEnemyCount <= 0 {
 			return startNextWave()
 		}
 		return false

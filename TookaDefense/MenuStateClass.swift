@@ -11,7 +11,7 @@ import GameplayKit
 import SpriteKit
 
 class GameSceneReadyState: GameSceneState {
-	override func isValidNextState(stateClass: AnyClass) -> Bool {
+	override func isValidNextState(_ stateClass: AnyClass) -> Bool {
 		return stateClass == GameSceneLevelSelector.self || stateClass == GameSceneActiveState.self
 	}
 }

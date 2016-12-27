@@ -20,64 +20,64 @@ enum TowerType: String {
 	
 	var fireRate: Double {
 		switch self {
-		case Water: return 1
-		case Plant: return 1
-		case Ice: return 0.7
-		case Fire: return 0.7
+		case .Water: return 1
+		case .Plant: return 1
+		case .Ice: return 0.7
+		case .Fire: return 0.7
 		}
 	}
 	
 	var damage: Int {
 		switch self {
-		case Water: return 35
-		case Plant: return 40
-		case Ice: return 55
-		case Fire: return 65
+		case .Water: return 35
+		case .Plant: return 40
+		case .Ice: return 55
+		case .Fire: return 65
 		}
 	}
 	
 	var range: CGFloat {
 		switch self {
-		case Water: return 100
-		case Plant: return 110
-		case Ice: return 125
-		case Fire: return 150
+		case .Water: return 100
+		case .Plant: return 110
+		case .Ice: return 125
+		case .Fire: return 150
 		}
 	}
 	
 	var cost: Int {
 		switch self {
-		case Water: return 50
-		case Plant: return 60
-		case Ice: return 100
-		case Fire: return 200
+		case .Water: return 50
+		case .Plant: return 60
+		case .Ice: return 100
+		case .Fire: return 200
 		}
 	}
 	
 	var sellPrice: Int {
 		switch self {
-		case Water: return 13
-		case Plant: return 22
-		case Ice: return   90
-		case Fire: return 200
+		case .Water: return 13
+		case .Plant: return 22
+		case .Ice: return   90
+		case .Fire: return 200
 		}
 	}
 	
 	var upgradePrice: Int {
 		switch self {
-		case Water: return 13
-		case Plant: return 22
-		case Ice: return   90
-		case Fire: return 200
+		case .Water: return 13
+		case .Plant: return 22
+		case .Ice: return   90
+		case .Fire: return 200
 		}
 	}
 	
 	var color: UIColor {
 		switch self {
-		case Water: return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
-		case Plant: return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
-		case Ice: return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
-		case Fire: return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
+		case .Water: return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
+		case .Plant: return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
+		case .Ice: return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
+		case .Fire: return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
 		}
 	}
 }
@@ -106,6 +106,10 @@ class TowerEntity: GKEntity {
 		
 		firingComponent = FiringComponent(towerType: towerType, parentNode: spriteComponent.node)
 		addComponent(firingComponent)
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
 	}
 	
 	func loadAnimations() -> [AnimationState: Animation] {

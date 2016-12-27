@@ -12,8 +12,8 @@ import SpriteKit
 
 class GameSceneActiveState: GameSceneState {
 	
-	override func didEnterWithPreviousState(previousState: GKState?) {
-		scene.paused = false
+	override func didEnter(from previousState: GKState?) {
+		scene.isPaused = false
 		scene.waveManager.currentWave = 0
 		showLevelSelector(false)
 		scene.createGrid()
@@ -28,7 +28,7 @@ class GameSceneActiveState: GameSceneState {
 		scene.startFirstWave()
 	}
 	
-	override func isValidNextState(stateClass: AnyClass) -> Bool {
+	override func isValidNextState(_ stateClass: AnyClass) -> Bool {
 		return stateClass == GameSceneWinState.self || stateClass == GameSceneLoseState.self || stateClass == GameSceneLevelSelector.self
 	}
 }

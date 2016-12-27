@@ -34,7 +34,6 @@
 		00394FDB1C0298E700594615 /* Lose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00394FD91C0298E700594615 /* Lose@2x.png */; };
 		00394FDC1C0298E700594615 /* Win@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00394FDA1C0298E700594615 /* Win@2x.png */; };
 		005F03E11C1C9DDA00150F9B /* LevelSelectorTitle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 005F03D41C1C9DDA00150F9B /* LevelSelectorTitle@2x.png */; };
-		007362F61C1DFEE600B097E1 /* MagicTp.sks in Resources */ = {isa = PBXBuildFile; fileRef = 007362F41C1DFEE600B097E1 /* MagicTp.sks */; };
 		007362F71C1DFEE600B097E1 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 007362F51C1DFEE600B097E1 /* spark.png */; };
 		007362FA1C1E0A9C00B097E1 /* SlowAndBoost.sks in Resources */ = {isa = PBXBuildFile; fileRef = 007362F81C1E0A9C00B097E1 /* SlowAndBoost.sks */; };
 		007362FB1C1E0A9C00B097E1 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 007362F91C1E0A9C00B097E1 /* bokeh.png */; };
@@ -98,6 +97,7 @@
 		00F9D8901C020E6D00FDC148 /* Enemy1.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 00F9D88F1C020E6D00FDC148 /* Enemy1.atlas */; };
 		00F9D8921C020E7700FDC148 /* WaterTower.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 00F9D8911C020E7700FDC148 /* WaterTower.atlas */; };
 		00F9D8941C02790400FDC148 /* BackgroundLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F9D8931C02790400FDC148 /* BackgroundLogo@2x.png */; };
+		2B2314231E11309500DFD52C /* MagicTp.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2B2314221E11309500DFD52C /* MagicTp.sks */; };
 		DAC31A1D1BD6C19300EEC069 /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC31A1C1BD6C19300EEC069 /* SpriteComponent.swift */; };
 		DAC31A201BD6C2D400EEC069 /* EnemyEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC31A1F1BD6C2D400EEC069 /* EnemyEntity.swift */; };
 		DAC31A241BD6C54100EEC069 /* AnimationComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC31A231BD6C54100EEC069 /* AnimationComponent.swift */; };
@@ -148,7 +148,6 @@
 		00394FD91C0298E700594615 /* Lose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Lose@2x.png"; sourceTree = "<group>"; };
 		00394FDA1C0298E700594615 /* Win@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Win@2x.png"; sourceTree = "<group>"; };
 		005F03D41C1C9DDA00150F9B /* LevelSelectorTitle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LevelSelectorTitle@2x.png"; sourceTree = "<group>"; };
-		007362F41C1DFEE600B097E1 /* MagicTp.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = MagicTp.sks; path = ../MagicTp.sks; sourceTree = "<group>"; };
 		007362F51C1DFEE600B097E1 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = spark.png; path = ../spark.png; sourceTree = "<group>"; };
 		007362F81C1E0A9C00B097E1 /* SlowAndBoost.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SlowAndBoost.sks; sourceTree = "<group>"; };
 		007362F91C1E0A9C00B097E1 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
@@ -212,6 +211,7 @@
 		00F9D88F1C020E6D00FDC148 /* Enemy1.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Enemy1.atlas; sourceTree = "<group>"; };
 		00F9D8911C020E7700FDC148 /* WaterTower.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = WaterTower.atlas; sourceTree = "<group>"; };
 		00F9D8931C02790400FDC148 /* BackgroundLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BackgroundLogo@2x.png"; sourceTree = "<group>"; };
+		2B2314221E11309500DFD52C /* MagicTp.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MagicTp.sks; sourceTree = "<group>"; };
 		DAC31A1C1BD6C19300EEC069 /* SpriteComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
 		DAC31A1F1BD6C2D400EEC069 /* EnemyEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyEntity.swift; sourceTree = "<group>"; };
 		DAC31A231BD6C54100EEC069 /* AnimationComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationComponent.swift; sourceTree = "<group>"; };
@@ -424,7 +424,7 @@
 		00D9656F1C178AF500753938 /* Particules */ = {
 			isa = PBXGroup;
 			children = (
-				007362F41C1DFEE600B097E1 /* MagicTp.sks */,
+				2B2314221E11309500DFD52C /* MagicTp.sks */,
 				007362F81C1E0A9C00B097E1 /* SlowAndBoost.sks */,
 				007362F91C1E0A9C00B097E1 /* bokeh.png */,
 				007362F51C1DFEE600B097E1 /* spark.png */,
@@ -567,6 +567,7 @@
 					DAEAE8F61BB68B79000ACA2E = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 32M3E59Q24;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -609,7 +610,6 @@
 				00AB59791C1370FB0078EBE5 /* Wall@2x.png in Resources */,
 				007F397F1C1CAE0B003A1A66 /* Level12Box@2x.png in Resources */,
 				007A15EC1C11142A001D0C8E /* SellButton@2x.png in Resources */,
-				007362F61C1DFEE600B097E1 /* MagicTp.sks in Resources */,
 				0076D64B1C1C6C2F00DA1EDA /* score@2x.png in Resources */,
 				00394FD31C028CE900594615 /* NO ADS@2x.png in Resources */,
 				DAEAE9871BB68E66000ACA2E /* MenuScene.sks in Resources */,
@@ -624,6 +624,7 @@
 				0076D64C1C1C6C2F00DA1EDA /* sms1@2x.png in Resources */,
 				0076D64A1C1C6C2F00DA1EDA /* Restart button@2x.png in Resources */,
 				007F397D1C1CAE0B003A1A66 /* Level10Box@2x.png in Resources */,
+				2B2314231E11309500DFD52C /* MagicTp.sks in Resources */,
 				00D965721C178B5600753938 /* ExplosionParticule.sks in Resources */,
 				DAEAE8FD1BB68B79000ACA2E /* GameScene.sks in Resources */,
 				DAEAE9891BB68E66000ACA2E /* WinScene.sks in Resources */,
@@ -828,10 +829,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = TookaDefense/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tastyapp.tooka;
 				PRODUCT_NAME = TookaDefense;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -841,10 +843,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = TookaDefense/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tastyapp.tooka;
 				PRODUCT_NAME = TookaDefense;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

@@ -12,7 +12,7 @@ import AVFoundation
 
 
 class GameSceneInit: SKScene {
-	var graph: GKGridGraph!
+	var graph: GKGridGraph<GKGridGraphNode>!
 	var pathLine: SKNode!
 	var path: [GKGridGraphNode]!
 	
@@ -21,8 +21,8 @@ class GameSceneInit: SKScene {
 	var gamePaused: Bool = true
 	var gameLoopPaused = true
 	
-	override func didMoveToView(view: SKView) {
-		super.didMoveToView(view)
+	override func didMove(to view: SKView) {
+		super.didMove(to: view)
 		
 		physicsWorld.gravity = CGVector.zero
 		

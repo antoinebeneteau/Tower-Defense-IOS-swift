@@ -21,7 +21,7 @@ extension float2 {
 		self.init(x: Float(point.x), y: Float(point.y))
 	}
 	
-	func distanceTo(point: float2) -> Float {
+	func distanceTo(_ point: float2) -> Float {
 		let xDist = self.x - point.x
 		let yDist = self.y - point.y
 		return sqrt((xDist*xDist) + (yDist*yDist))
@@ -30,27 +30,23 @@ extension float2 {
 
 // Tourner node pour faire face à un autre
 extension SKNode {
-	func rotateToFaceNode(targetNode: SKNode, sourceNode: SKNode) {
+	func rotateToFaceNode(_ targetNode: SKNode, sourceNode: SKNode) {
 		print("Source position: \(sourceNode.position)")
 		print("Target position: \(targetNode.position)")
 		let angle = atan2(targetNode.position.y - sourceNode.position.y, targetNode.position.x - sourceNode.position.x) - CGFloat(M_PI/2)
 		print("Angle: \(angle)")
-		self.runAction(SKAction.rotateToAngle(angle, duration: 0))
+		self.run(SKAction.rotate(toAngle: angle, duration: 0))
 	}
 }
 
 // Delai entre vagues obj
-func delay(delay:Double, closure:()->()) {
-	dispatch_after(
-		dispatch_time(
-			DISPATCH_TIME_NOW,
-			Int64(delay * Double(NSEC_PER_SEC))
-		),
-		dispatch_get_main_queue(), closure)
+func delay(_ delay:Double, closure:@escaping ()->()) {
+	DispatchQueue.main.asyncAfter(
+		deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
 }
 
 // Distance entre deux nodes
-func distanceBetween(nodeA: SKNode, nodeB: SKNode) -> CGFloat {
+func distanceBetween(_ nodeA: SKNode, nodeB: SKNode) -> CGFloat {
 	return CGFloat(hypotf(Float(nodeB.position.x - nodeA.position.x), Float(nodeB.position.y - nodeA.position.y)));
 }
 
