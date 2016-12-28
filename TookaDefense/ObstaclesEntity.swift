@@ -41,6 +41,10 @@ class ObstacleEntity: GKEntity {
 		spriteComponent = SpriteComponent(entity: self, texture: defaultTexture, size: textureSize, name: obstacleType.rawValue)
 		addComponent(spriteComponent)
 	}
+
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
+	}
 }
 
 

@@ -12,27 +12,27 @@ import SpriteKit
 enum GameLayer: CGFloat {
 	static let zDeltaForSprites: CGFloat = 10
 	
-	case Background = -100
-	case Shadows = -50
-	case Sprites = 0
-	case Hud = 1000
-	case Overlay = 1100
+	case background = -100
+	case shadows = -50
+	case sprites = 0
+	case hud = 1000
+	case overlay = 1100
 	
 	var nodeName: String {
 		switch self {
-		case .Background: return "Background"
-		case .Shadows: return "Shadows"
-		case .Sprites: return "Sprites"
-		case .Hud: return "Hud"
-		case .Overlay: return "Overlay"
+		case .background: return "Background"
+		case .shadows: return "Shadows"
+		case .sprites: return "Sprites"
+		case .hud: return "Hud"
+		case .overlay: return "Overlay"
 		}
 	}
 	
-	static var allLayers = [Background, Shadows, Sprites, Hud, Overlay]
+	static var allLayers = [background, shadows, sprites, hud, overlay]
 }
 
 var gameLayerNodes = [GameLayer: SKNode]()
 
-func addNode(node: SKNode, toGameLayer: GameLayer) {
+func addNode(_ node: SKNode, toGameLayer: GameLayer) {
 	gameLayerNodes[toGameLayer]!.addChild(node)
 }

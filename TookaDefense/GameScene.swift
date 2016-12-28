@@ -35,6 +35,19 @@
 
 import SpriteKit
 import GameplayKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 
 class GameScene: GameSceneInit {
@@ -64,7 +77,7 @@ class GameScene: GameSceneInit {
 			GameSceneLoseState(scene: self)
 		])
 	
-	var lastUpdateTimeInterval: NSTimeInterval = 0
+	var lastUpdateTimeInterval: TimeInterval = 0
 	
 	var entities = Set<GKEntity>()
 	
@@ -81,41 +94,41 @@ class GameScene: GameSceneInit {
 		return [animationSystem, firingSystem]
 	}()
 	
-	override func didMoveToView(view: SKView) {
-		super.didMoveToView(view)
+	override func didMove(to view: SKView) {
+		super.didMove(to: view)
 		
 		let background = SKSpriteNode(color: UIColor(red: 0.20, green: 0.29, blue: 0.37, alpha: 1.0), size: CGSize(width: self.size.width, height: self.size.height))
-		background.position = CGPointMake(self.size.width / 2, self.size.height / 2)
+		background.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
 		addChild(background)
 		
 		physicsWorld.gravity = CGVector(dx: 0, dy: 0)
 		
-		stateMachine.enterState(GameSceneReadyState.self)
+		stateMachine.enter(GameSceneReadyState.self)
 		
 		let waves = [
 			Wave(enemyCount: 5, enemyDelay: 1.5, enemyType: .Enemy1),
 			Wave(enemyCount: 5, enemyDelay: 1.5, enemyType: .Enemy2),
 		]
 		waveManager = WaveManager(waves: waves,
-			newWaveHandler: { (waveNum) -> Void in self.runAction(SKAction.playSoundFileNamed("NewWave.mp3", waitForCompletion: false))},
+			newWaveHandler: { (waveNum) -> Void in self.run(SKAction.playSoundFileNamed("NewWave.mp3", waitForCompletion: false))},
 			newEnemyHandler: { (enemyType) -> Void in self.addEnemy(enemyType, gridposition: int2(0,5), endGridPosition: int2(17,5))}
 		)
 		waveLabel.text = "\(waveManager.currentWave)/\(waveManager.waves.count)"
 	}
 	
-	override func update(currentTime: NSTimeInterval) {
+	override func update(_ currentTime: TimeInterval) {
 		super.update(currentTime)
-		if paused { return }
+		if isPaused { return }
 		
 		guard view != nil else { return }
 		
 		let deltaTime = currentTime - lastUpdateTimeInterval
 		lastUpdateTimeInterval = currentTime
 		
-		stateMachine.updateWithDeltaTime(deltaTime)
+		stateMachine.update(deltaTime: deltaTime)
 		
 		for componentSystem in componentSystems {
-			componentSystem.updateWithDeltaTime(deltaTime)
+			componentSystem.update(deltaTime: deltaTime)
 		}
 	}
 	
@@ -185,10 +198,10 @@ class GameScene: GameSceneInit {
 					}
 				} else if slow.obstacleType == .Diamond && diamond == 0{
 					if test {
-						diamond++
+						diamond += 1
 						diamondLabel.text = "\(diamond)"
 						slow.spriteComponent.node.zPosition = 2
-						slow.spriteComponent.node.runAction(SKAction.moveTo(diamondLabelImage.position, duration: 1.0))
+						slow.spriteComponent.node.run(SKAction.move(to: diamondLabelImage.position, duration: 1.0))
 					}
 				}
 			}
@@ -198,10 +211,10 @@ class GameScene: GameSceneInit {
 				}
 				gold += enemy.enemyType.goldReward
 				updateHUD()
-				enemyKilled++
+				enemyKilled += 1
 				if waveManager.removeEnemyFromWave() == true {
 					if levelToLoad <= levels.count {
-						stateMachine.enterState(GameSceneWinState.self)
+						stateMachine.enter(GameSceneWinState.self)
 					}
 				}
 				waveLabel.text = "\(waveManager.currentWave)/\(waveManager.waves.count)"
@@ -213,7 +226,7 @@ class GameScene: GameSceneInit {
 				updateHUD()
 				
 				if baseLives <= 0 {
-					stateMachine.enterState(GameSceneLoseState.self)
+					stateMachine.enter(GameSceneLoseState.self)
 				}
 				enemy.spriteComponent.node.removeFromParent()
 				entities.remove(enemy)
@@ -221,64 +234,64 @@ class GameScene: GameSceneInit {
 		}
 	}
 	
-	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		for touch in (touches ) {
-			let touchLocation = touch.locationInNode(self)
-			let touchedNode = self.nodeAtPoint(touchLocation)
+			let touchLocation = touch.location(in: self)
+			let touchedNode = self.atPoint(touchLocation)
 			
 			switch stateMachine.currentState {
 			case is GameSceneReadyState:
 				if touchedNode.name == "playButton" {
-					stateMachine.enterState(GameSceneLevelSelector.self)
+					stateMachine.enter(GameSceneLevelSelector.self)
 					return
 				}
 			case is GameSceneLevelSelector:
 				switch touchedNode.name! {
 				case "homeButton":
 					let newScene = GameScene(fileNamed:"GameScene")
-					newScene!.scaleMode = .AspectFill
-					let reveal = SKTransition.doorsCloseHorizontalWithDuration(0.5)
+					newScene!.scaleMode = .aspectFill
+					let reveal = SKTransition.doorsCloseHorizontal(withDuration: 0.5)
 					self.view?.presentScene(newScene!, transition: reveal)
 					break
 				case "box1":
 					levelToLoad = 1
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				case "box2":
 					levelToLoad = 2
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				case "box3":
 					levelToLoad = 3
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				case "box4":
 					levelToLoad = 4
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				case "box5":
 					levelToLoad = 5
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				case "box6":
 					levelToLoad = 6
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				case "box7":
 					levelToLoad = 7
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				case "box8":
 					levelToLoad = 8
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				case "box9":
 					levelToLoad = 9
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				case "box10":
 					levelToLoad = 10
-					stateMachine.enterState(GameSceneActiveState.self)
+					stateMachine.enter(GameSceneActiveState.self)
 					break
 				default:
 					break
@@ -293,7 +306,7 @@ class GameScene: GameSceneInit {
 						return
 					}
 					else if placingTower {
-						if let touchedNode = self.nodeAtPoint(touchLocation).name {
+						if let touchedNode = self.atPoint(touchLocation).name {
 							placeTower(selectorPosition, touchedNode: touchedNode)
 							hideTowerSelector()
 							return
@@ -305,23 +318,23 @@ class GameScene: GameSceneInit {
 				} else {
 					if touchedNode.name == "LeaveButton" {
 						let newScene = GameScene(fileNamed:"GameScene")
-						newScene!.scaleMode = .AspectFill
-						let reveal = SKTransition.doorsCloseHorizontalWithDuration(0.5)
+						newScene!.scaleMode = .aspectFill
+						let reveal = SKTransition.doorsCloseHorizontal(withDuration: 0.5)
 						self.view?.presentScene(newScene!, transition: reveal)
 						return
 					}
-					if touchedNode.name == "PauseButton" && !paused{
-						paused = true
+					if touchedNode.name == "PauseButton" && !isPaused{
+						isPaused = true
 					} else {
-						paused = false
+						isPaused = false
 					}
 				}
 				break
 			case is GameSceneLoseState:
 				if touchedNode.name == "homeButton" {
 					let newScene = GameScene(fileNamed:"GameScene")
-					newScene!.scaleMode = .AspectFill
-					let reveal = SKTransition.doorsCloseHorizontalWithDuration(0.5)
+					newScene!.scaleMode = .aspectFill
+					let reveal = SKTransition.doorsCloseHorizontal(withDuration: 0.5)
 					self.view?.presentScene(newScene!, transition: reveal)
 					return
 				}
@@ -329,8 +342,8 @@ class GameScene: GameSceneInit {
 			case is GameSceneWinState:
 				if touchedNode.name == "homeButton" {
 					let newScene = GameScene(fileNamed:"GameScene")
-					newScene!.scaleMode = .AspectFill
-					let reveal = SKTransition.doorsCloseHorizontalWithDuration(0.5)
+					newScene!.scaleMode = .aspectFill
+					let reveal = SKTransition.doorsCloseHorizontal(withDuration: 0.5)
 					self.view?.presentScene(newScene!, transition: reveal)
 					return
 				}
@@ -345,19 +358,19 @@ class GameScene: GameSceneInit {
 		waveManager.startNextWave()
 	}
 	
-	func addEntity(entity: GKEntity) {
+	func addEntity(_ entity: GKEntity) {
 		entities.insert(entity)
 		for componentSystem in self.componentSystems {
-			componentSystem.addComponentWithEntity(entity)
+			componentSystem.addComponent(foundIn: entity)
 		}
 		
-		if let spriteNode = entity.componentForClass(
-			SpriteComponent.self)?.node {
-				addNode(spriteNode, toGameLayer: .Sprites)
+		if let spriteNode = entity.component(
+			ofType: SpriteComponent.self)?.node {
+				addNode(spriteNode, toGameLayer: .sprites)
 		}
 	}
 	
-	func addEnemy(enemyType: EnemyType, gridposition: int2, endGridPosition: int2) {
+	func addEnemy(_ enemyType: EnemyType, gridposition: int2, endGridPosition: int2) {
 		let startPosition = pointForGridPosition(gridposition)
 		let endPosition = pointForGridPosition(endGridPosition)
 		
@@ -370,12 +383,12 @@ class GameScene: GameSceneInit {
 		addEntity(enemy)
 	}
 	
-	func addTower(towerType: TowerType, gridPosition: int2) {
+	func addTower(_ towerType: TowerType, gridPosition: int2) {
 		if gold >= towerType.cost {
 			gold -= towerType.cost
 			moneySpent += towerType.cost
 			updateHUD()
-			if let node = graph.nodeAtGridPosition(gridPosition) {
+			if let node = graph.node(atGridPosition: gridPosition) {
 				let position = pointForGridPosition(gridPosition)
 				let coordinate = gridPosition
 				
@@ -383,7 +396,7 @@ class GameScene: GameSceneInit {
 				towerEntity.spriteComponent.node.position = position
 				layout[Int(coordinate.x)][Int(coordinate.y)] = towerEntity
 				
-				graph.removeNodes([node])
+				graph.remove([node])
 				recalculateEnemyPaths()
 				if path != nil {updateVisualPath()}
 				
@@ -392,8 +405,8 @@ class GameScene: GameSceneInit {
 		}
 	}
 	
-	func addObstacle(obstacleType: ObstacleType, gridPosition: int2) {
-		if let node = graph.nodeAtGridPosition(gridPosition) {
+	func addObstacle(_ obstacleType: ObstacleType, gridPosition: int2) {
+		if let node = graph.node(atGridPosition: gridPosition) {
 			let position = pointForGridPosition(gridPosition)
 			let coordinate = gridPosition
 			
@@ -403,7 +416,7 @@ class GameScene: GameSceneInit {
 			
 			switch obstacleType {
 			case .Wall:
-				graph.removeNodes([node])
+				graph.remove([node])
 				break
 			case .Teleport:
 				teleport.append(obstacleEntity)
@@ -425,7 +438,7 @@ class GameScene: GameSceneInit {
 		return int2(x,y)
 	}
 	
-	func coordinateOfPoint(location: CGPoint) -> int2? {
+	func coordinateOfPoint(_ location: CGPoint) -> int2? {
 		let col = Int32(ceil((Double(location.x) - offsetX) / boxSize)) - 1
 		let row = Int32(ceil((Double(location.y) - offsetY) / boxSize)) - 1
 		
@@ -433,7 +446,7 @@ class GameScene: GameSceneInit {
 	}
 	
 	// returns CGPoint at center of grid coordinate
-	func pointForGridPosition(gridPosition: int2) -> CGPoint {
+	func pointForGridPosition(_ gridPosition: int2) -> CGPoint {
 		let x = Double(gridPosition.x) * boxSize + offsetX + (boxSize / 2)
 		let y = Double(gridPosition.y) * boxSize + offsetY + (boxSize / 2)
 		
@@ -453,15 +466,15 @@ class GameScene: GameSceneInit {
 		
 		for col in 0 ..< gridColumns {
 			let xPos = boxSize * Double(col)
-			layout.append(Array(count: gridRows, repeatedValue: GKEntity()))
+			layout.append(Array(repeating: GKEntity(), count: gridRows))
 			
 			for row in 0 ..< gridRows {
 				let yPos = boxSize * Double(row)
 				
 				let path = UIBezierPath(rect: CGRect(x: xPos + offsetX, y: yPos + offsetY, width: boxSize, height: boxSize))
 				let box = SKShapeNode()
-				box.path = path.CGPath
-				box.strokeColor = UIColor.grayColor()
+				box.path = path.cgPath
+				box.strokeColor = UIColor.gray
 				box.alpha = 0.3
 				grid.addChild(box)
 			}
@@ -476,8 +489,8 @@ class GameScene: GameSceneInit {
 			let yPos = boxSize * 2.0 * Double(row) + offsetY
 			let path = UIBezierPath(rect: CGRect(x: boxSize * Double(gridColumns) + offsetX * 1.3, y: yPos, width: boxSize * 2.0, height: boxSize * 2.0))
 			let box = SKShapeNode()
-			box.path = path.CGPath
-			box.strokeColor = UIColor.grayColor()
+			box.path = path.cgPath
+			box.strokeColor = UIColor.gray
 			box.alpha = 1.0
 			box.lineWidth = 2.0
 			
@@ -499,8 +512,8 @@ class GameScene: GameSceneInit {
 			let yPos = boxSize * Double(gridRows) + offsetY + offsetX * 0.3
 			let path = UIBezierPath(rect: CGRect(x: boxSize * 6.0 * Double(row) + offsetX, y: yPos, width: boxSize * 6.0, height: boxSize))
 			let box = SKShapeNode()
-			box.path = path.CGPath
-			box.strokeColor = UIColor.grayColor()
+			box.path = path.cgPath
+			box.strokeColor = UIColor.gray
 			box.alpha = 1.0
 			box.lineWidth = 2.0
 			
@@ -514,26 +527,26 @@ class GameScene: GameSceneInit {
 		self.addChild(hudGrid)
 	}
 	
-	func hudConvertPlacement(gridPosition: Int, hud: String, boxWidthAndHeight: CGSize) ->CGPoint {
+	func hudConvertPlacement(_ gridPosition: Int, hud: String, boxWidthAndHeight: CGSize) ->CGPoint {
 		let x: Double
 		let y: Double
 		
 		let a = offsetY
 		let b = offsetX
-		let lOffset = b * 0.3
+		let lOffset = b! * 0.3
 		let boxW = boxWidthAndHeight.width / 2
 		let boxH = boxWidthAndHeight.height / 2
 		
 		if hud == "Stats" {
-			x = b + Double(gridPosition + (gridPosition + 1)) * Double(boxW)
-			y = a + boxSize * Double(gridRows) + lOffset + Double(boxH)
+			x = b! + Double(gridPosition + (gridPosition + 1)) * Double(boxW)
+			y = a! + boxSize * Double(gridRows) + lOffset + Double(boxH)
 			return CGPoint(x: x, y: y)
 		} else if hud == "Option" {
-			x = b * 1.3 + boxSize * Double(gridColumns) + Double(boxW)
-			y = a + Double(gridPosition + (gridPosition + 1)) * Double(boxH)
+			x = b! * 1.3 + boxSize * Double(gridColumns) + Double(boxW)
+			y = a! + Double(gridPosition + (gridPosition + 1)) * Double(boxH)
 			return CGPoint(x: x, y: y)
 		}
-		return CGPointMake(0, 0)
+		return CGPoint(x: 0, y: 0)
 	}
 	
 	func addHudStuff() {
@@ -556,21 +569,21 @@ class GameScene: GameSceneInit {
 		recordButton.name = "RecordButton"
 		self.addChild(recordButton)
 		
-		baseLabel.runAction(SKAction.fadeAlphaTo(1.0, duration: 0.5))
+		baseLabel.run(SKAction.fadeAlpha(to: 1.0, duration: 0.5))
 		baseLabelImage.size = statStuffSize
-		baseLabelImage.position = CGPointMake(baseLabel.position.x - CGFloat(boxSize * 2.0), baseLabel.position.y)
+		baseLabelImage.position = CGPoint(x: baseLabel.position.x - CGFloat(boxSize * 2.0), y: baseLabel.position.y)
 		self.addChild(baseLabelImage)
-		goldLabel.runAction(SKAction.fadeAlphaTo(1.0, duration: 0.5))
+		goldLabel.run(SKAction.fadeAlpha(to: 1.0, duration: 0.5))
 		goldLabelImage.size = statStuffSize
-		goldLabelImage.position = CGPointMake(goldLabel.position.x - CGFloat(boxSize * 2.0), goldLabel.position.y)
+		goldLabelImage.position = CGPoint(x: goldLabel.position.x - CGFloat(boxSize * 2.0), y: goldLabel.position.y)
 		self.addChild(goldLabelImage)
-		waveLabel.runAction(SKAction.fadeAlphaTo(1.0, duration: 0.5))
+		waveLabel.run(SKAction.fadeAlpha(to: 1.0, duration: 0.5))
 		waveLabelImage.size = statStuffSize
-		waveLabelImage.position = CGPointMake(waveLabel.position.x - CGFloat(boxSize * 2.0), waveLabel.position.y)
+		waveLabelImage.position = CGPoint(x: waveLabel.position.x - CGFloat(boxSize * 2.0), y: waveLabel.position.y)
 		self.addChild(waveLabelImage)
-		diamondLabel.runAction(SKAction.fadeAlphaTo(1.0, duration: 0.5))
+		diamondLabel.run(SKAction.fadeAlpha(to: 1.0, duration: 0.5))
 		diamondLabelImage.size = statStuffSize
-		diamondLabelImage.position = CGPointMake(diamondLabel.position.x - CGFloat(boxSize / 1.15), diamondLabel.position.y)
+		diamondLabelImage.position = CGPoint(x: diamondLabel.position.x - CGFloat(boxSize / 1.15), y: diamondLabel.position.y)
 		self.addChild(diamondLabelImage)
 		
 	}
@@ -582,17 +595,17 @@ class GameScene: GameSceneInit {
 		let gridPosition = coordinateOfPoint(position)
 		selectedBox = SKSpriteNode(imageNamed: "selectedBox1")
 		selectedBox.alpha = 0.0
-		let animation1 = SKAction.fadeAlphaTo(0.5, duration: 0.5)
+		let animation1 = SKAction.fadeAlpha(to: 0.5, duration: 0.5)
 		selectedBox.position = pointForGridPosition(gridPosition!)
 		selectedBox.size = CGSize(width: boxSize, height: boxSize)
 		self.addChild(selectedBox)
-		selectedBox.runAction(animation1)
+		selectedBox.run(animation1)
 		
 		
 		for towerSelectorNode in towerSelectorNodes {
 			
 			towerSelectorNode.position = pointForGridPosition(gridPosition!)
-			gameLayerNodes[.Hud]!.addChild(towerSelectorNode)
+			gameLayerNodes[.hud]!.addChild(towerSelectorNode)
 			
 			towerSelectorNode.show()
 		}
@@ -602,8 +615,8 @@ class GameScene: GameSceneInit {
 		if placingTower == false { return }
 		placingTower = false
 		
-		let animation1 = SKAction.fadeAlphaTo(0.0, duration: 1.0)
-		selectedBox.runAction(animation1)
+		let animation1 = SKAction.fadeAlpha(to: 0.0, duration: 1.0)
+		selectedBox.run(animation1)
 		
 		for towerSelectorNode in towerSelectorNodes {
 			towerSelectorNode.hide {
@@ -612,13 +625,13 @@ class GameScene: GameSceneInit {
 		}
 	}
 	
-	func loadTowerSelectorNodeForSellAndBuy(towerToSell: TowerType) {
+	func loadTowerSelectorNodeForSellAndBuy(_ towerToSell: TowerType) {
 		let towerTypeCount = TowerType.allValues.count
-		let nodeForSellAndBuyPath: String = NSBundle.mainBundle().pathForResource("TowerMenu", ofType: "sks")!
-		let nodeForSellAndBuyScene = NSKeyedUnarchiver.unarchiveObjectWithFile(nodeForSellAndBuyPath) as! SKScene
+		let nodeForSellAndBuyPath: String = Bundle.main.path(forResource: "TowerMenu", ofType: "sks")!
+		let nodeForSellAndBuyScene = NSKeyedUnarchiver.unarchiveObject(withFile: nodeForSellAndBuyPath) as! SKScene
 		
 		for t in 0..<towerTypeCount {
-			let towerSelectorNode = (nodeForSellAndBuyScene.childNodeWithName("MainNode"))!.copy() as! TowerSelectorNode
+			let towerSelectorNode = (nodeForSellAndBuyScene.childNode(withName: "MainNode"))!.copy() as! TowerSelectorNode
 			towerSelectorNode.setTowerSell(towerToSell, towerType: TowerType.allValues[t], pointForSelection: numToPointForSelection(t))
 		}
 	}
@@ -626,32 +639,32 @@ class GameScene: GameSceneInit {
 	func loadTowerSelectorNodes() {
 		let towerTypeCount = TowerType.allValues.count
 		
-		let towerSelectorNodePath: String = NSBundle.mainBundle().pathForResource("TowerMenu", ofType: "sks")!
-		let towerSelectorNodeScene = NSKeyedUnarchiver.unarchiveObjectWithFile(towerSelectorNodePath) as! SKScene
+		let towerSelectorNodePath: String = Bundle.main.path(forResource: "TowerMenu", ofType: "sks")!
+		let towerSelectorNodeScene = NSKeyedUnarchiver.unarchiveObject(withFile: towerSelectorNodePath) as! SKScene
 		
 		for t in 0..<towerTypeCount {
-			let towerSelectorNode = (towerSelectorNodeScene.childNodeWithName("MainNode"))!.copy() as! TowerSelectorNode
+			let towerSelectorNode = (towerSelectorNodeScene.childNode(withName: "MainNode"))!.copy() as! TowerSelectorNode
 			towerSelectorNode.setTower(TowerType.allValues[t], pointForSelection: numToPointForSelection(t))
 			
 			towerSelectorNodes.append(towerSelectorNode)
 		}
 	}
 	
-	func numToPointForSelection(number: Int) ->CGPoint {
+	func numToPointForSelection(_ number: Int) ->CGPoint {
 		let x = CGFloat(boxSize * 1.4)
 		switch number {
 		case 0:
-			return CGPointMake(x, 0)
+			return CGPoint(x: x, y: 0)
 		case 1:
-			return CGPointMake(0, x * 1.26)
+			return CGPoint(x: 0, y: x * 1.26)
 		case 2:
-			return CGPointMake(-x, 0)
+			return CGPoint(x: -x, y: 0)
 		case 3:
-			return CGPointMake(0, -x)
+			return CGPoint(x: 0, y: -x)
 		default:
 			break
 		}
-		return CGPointMake(x, 0)
+		return CGPoint(x: x, y: 0)
 	}
 	
 	func initializeGrid() {
@@ -660,28 +673,28 @@ class GameScene: GameSceneInit {
 		self.addChild(pathLine)
 	}
 	
-	func setEnemyOnPath(enemy: EnemyEntity, toPoint point: CGPoint)
+	func setEnemyOnPath(_ enemy: EnemyEntity, toPoint point: CGPoint)
 	{
 		let enemyNode = enemy.spriteComponent.node
 		
-		let currentNode = graph.nodeAtGridPosition(coordinateOfPoint(enemyNode.position)!)
-		let endNode = graph.nodeAtGridPosition(coordinateOfPoint(enemy.endPoint)!)
-		path = graph.findPathFromNode(currentNode!, toNode: endNode!) as! [GKGridGraphNode]
-		path.removeAtIndex(0)
+		let currentNode = graph.node(atGridPosition: coordinateOfPoint(enemyNode.position)!)
+		let endNode = graph.node(atGridPosition: coordinateOfPoint(enemy.endPoint)!)
+		path = graph.findPath(from: currentNode!, to: endNode!) as! [GKGridGraphNode]
+		path.remove(at: 0)
 		
 		var sequence = [SKAction]()
 		
 		for node in path {
 			let location = pointForGridPosition(node.gridPosition)
-			let update = SKAction.runBlock({ [unowned self] in
+			let update = SKAction.run({ [unowned self] in
 				enemyNode.position = self.pointForGridPosition(node.gridPosition)
 				})
-			let actionDuration = NSTimeInterval(200.0 / enemy.enemyType.speed)
-			let action = SKAction.moveTo(location, duration: actionDuration)
+			let actionDuration = TimeInterval(200.0 / enemy.enemyType.speed)
+			let action = SKAction.move(to: location, duration: actionDuration)
 			
 			sequence += [action,update]
 		}
-		enemyNode.runAction(SKAction.sequence(sequence))
+		enemyNode.run(SKAction.sequence(sequence))
 	}
 	
 	func recalculateEnemyPaths() {
@@ -705,29 +718,29 @@ class GameScene: GameSceneInit {
 		let escapePath = self.path
 		
 		var index = 0
-		for node in escapePath {
+		for node in escapePath! {
 			let position = pointForGridPosition(node.gridPosition)
 			
-			if index + 1 < escapePath.count {
-				let nextPosition = pointForGridPosition(escapePath[index + 1].gridPosition)
+			if index + 1 < escapePath?.count {
+				let nextPosition = pointForGridPosition((escapePath?[index + 1].gridPosition)!)
 				let bezierPath = UIBezierPath()
-				let startPoint = CGPointMake(position.x, position.y)
-				let endPoint = CGPointMake(nextPosition.x, nextPosition.y)
-				bezierPath.moveToPoint(startPoint)
-				bezierPath.addLineToPoint(endPoint)
+				let startPoint = CGPoint(x: position.x, y: position.y)
+				let endPoint = CGPoint(x: nextPosition.x, y: nextPosition.y)
+				bezierPath.move(to: startPoint)
+				bezierPath.addLine(to: endPoint)
 				
 				let pattern: [CGFloat] = [CGFloat(boxSize / 10), CGFloat(boxSize / 10)]
-				let dashed = CGPathCreateCopyByDashingPath(bezierPath.CGPath, nil, 0, pattern, 2)!
+				let dashed = CGPath(__byDashing: bezierPath.cgPath, transform: nil, phase: 0, lengths: pattern, count: 2)!
 				
 				let line = SKShapeNode(path: dashed)
-				line.strokeColor = UIColor.blackColor()
+				line.strokeColor = UIColor.black
 				pathLine.addChild(line)
 			}
-			index++
+			index += 1
 		}
 	}
 	
-	func placeTower(selectorPosition: int2, touchedNode: String) {
+	func placeTower(_ selectorPosition: int2, touchedNode: String) {
 		if touchedNode == "Tower_Icon_WaterTower" {
 			addTower(.Water, gridPosition: selectorPosition)
 		} else if touchedNode == "Tower_Icon_PlantTower" {
@@ -739,7 +752,7 @@ class GameScene: GameSceneInit {
 		}
 	}
 	
-	func loadLevelMap(level: Int) {
+	func loadLevelMap(_ level: Int) {
 		for i in 0..<10 {
 			for j in 0..<18 {
 				if levels[level - 1][9 - i][j] == 1 {
@@ -759,14 +772,14 @@ class GameScene: GameSceneInit {
 		}
 	}
 	
-	func remove(entity: GKEntity) {
-		if let spriteNode = entity.componentForClass(SpriteComponent.self)?.node {
+	func remove(_ entity: GKEntity) {
+		if let spriteNode = entity.component(ofType: SpriteComponent.self)?.node {
 			spriteNode.removeFromParent()
 		}
 		entities.remove(entity)
 	}
 	
-	func explosion(position: CGPoint, explosionType: String) {
+	func explosion(_ position: CGPoint, explosionType: String) {
 		let explosionEmitterNode = SKEmitterNode(fileNamed:"ExplosionParticule")
 		explosionEmitterNode!.position = position
 		explosionEmitterNode?.zPosition = 2
@@ -778,10 +791,10 @@ class GameScene: GameSceneInit {
 		coinEarnedImage.size = CGSize(width: boxSize / 2, height: boxSize / 2)
 		coinEarnedImage.zPosition = 2
 		addChild(coinEarnedImage)
-		coinEarnedImage.runAction(SKAction.moveTo(goldLabelImage.position, duration: 1.0))
+		coinEarnedImage.run(SKAction.move(to: goldLabelImage.position, duration: 1.0))
 	}
 	
-	func teleportParticule(position: CGPoint, explosionType: String) {
+	func teleportParticule(_ position: CGPoint, explosionType: String) {
 		let explosionEmitterNode = SKEmitterNode(fileNamed:"MagicTp")
 		explosionEmitterNode!.position = position
 		explosionEmitterNode?.zPosition = 2
@@ -789,7 +802,7 @@ class GameScene: GameSceneInit {
 		self.addChild(explosionEmitterNode!)
 	}
 	
-	func boosterParticule(position: CGPoint, explosionType: String) {
+	func boosterParticule(_ position: CGPoint, explosionType: String) {
 		let explosionEmitterNode = SKEmitterNode(fileNamed:"SlowAndBoost")
 		explosionEmitterNode!.position = position
 		explosionEmitterNode?.zPosition = 2

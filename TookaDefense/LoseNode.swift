@@ -20,47 +20,47 @@ class LoseNode: SKNode {
 	}
 	
 	var homeButton: SKSpriteNode {
-		return self.childNodeWithName("homeButton") as! SKSpriteNode
+		return self.childNode(withName: "homeButton") as! SKSpriteNode
 	}
 	var replayButton: SKSpriteNode {
-		return self.childNodeWithName("replayButton") as! SKSpriteNode
+		return self.childNode(withName: "replayButton") as! SKSpriteNode
 	}
 	var smsButton: SKSpriteNode {
-		return self.childNodeWithName("smsButton") as! SKSpriteNode
+		return self.childNode(withName: "smsButton") as! SKSpriteNode
 	}
 	var twitterButton: SKSpriteNode {
-		return self.childNodeWithName("twitterButton") as! SKSpriteNode
+		return self.childNode(withName: "twitterButton") as! SKSpriteNode
 	}
 	var facebookButton: SKSpriteNode {
-		return self.childNodeWithName("facebookButton") as! SKSpriteNode
+		return self.childNode(withName: "facebookButton") as! SKSpriteNode
 	}
 	
 	var levelResLabel: SKLabelNode {
-		return self.childNodeWithName("levelResLabel") as! SKLabelNode
+		return self.childNode(withName: "levelResLabel") as! SKLabelNode
 	}
 	var enemyResLabel: SKLabelNode {
-		return self.childNodeWithName("enemyResLabel") as! SKLabelNode
+		return self.childNode(withName: "enemyResLabel") as! SKLabelNode
 	}
 	var moneyResLabel: SKLabelNode {
-		return self.childNodeWithName("moneyResLabel") as! SKLabelNode
+		return self.childNode(withName: "moneyResLabel") as! SKLabelNode
 	}
 	var timeResLabel: SKLabelNode {
-		return self.childNodeWithName("timeResLabel") as! SKLabelNode
+		return self.childNode(withName: "timeResLabel") as! SKLabelNode
 	}
 	
 	
-	func show(level: Int, enemy: Int, money: Int) {
+	func show(_ level: Int, enemy: Int, money: Int) {
 		levelResLabel.text = "\(level)"
 		enemyResLabel.text = "\(enemy)"
 		moneyResLabel.text = "\(money)"
 	}
 	func hide() {
-		let actionFadeOut = SKAction.fadeAlphaTo(0.0, duration: 0.5)
-		let actionPop = SKAction.runBlock { () -> Void in
+		let actionFadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.5)
+		let actionPop = SKAction.run { () -> Void in
 			self.removeFromParent()
 		}
 		let action = SKAction.sequence([actionFadeOut, actionPop])
-		self.runAction(action)
+		self.run(action)
 	}
 	
 }

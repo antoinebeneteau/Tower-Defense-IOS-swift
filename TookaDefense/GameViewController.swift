@@ -28,14 +28,14 @@ class GameViewController: UIViewController {
 			/* Sprite Kit applies additional optimizations to improve rendering performance */
 			skView.ignoresSiblingOrder = true
 			/* Set the scale mode to scale to fit the window */
-			scene.scaleMode = .AspectFill
+			scene.scaleMode = .aspectFill
 			
-			let reveal = SKTransition.doorsOpenHorizontalWithDuration(0.5)
+			let reveal = SKTransition.doorsOpenHorizontal(withDuration: 0.5)
 			skView.presentScene(scene, transition: reveal)
 		}
 	}
 	
-	override func shouldAutorotate() -> Bool {
+	override var shouldAutorotate : Bool {
 		return true
 	}
 	
@@ -44,7 +44,7 @@ class GameViewController: UIViewController {
 		
 	}
 	
-	override func prefersStatusBarHidden() -> Bool {
+	override var prefersStatusBarHidden : Bool {
 		return true
 	}
 }

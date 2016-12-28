@@ -20,18 +20,18 @@ class ReadyNode: SKNode {
 	}
 	
 	var playButton: SKSpriteNode {
-		return self.childNodeWithName("playButton") as! SKSpriteNode
+		return self.childNode(withName: "playButton") as! SKSpriteNode
 	}
 	
 	func show() {
 	}
 	
 	func hide() {
-		let actionFadeOut = SKAction.fadeAlphaTo(0.0, duration: 0.3)
-		let actionPop = SKAction.runBlock { () -> Void in
+		let actionFadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
+		let actionPop = SKAction.run { () -> Void in
 			self.removeFromParent()
 		}
 		let action = SKAction.sequence([actionFadeOut, actionPop])
-		self.runAction(action)
+		self.run(action)
 	}
 }

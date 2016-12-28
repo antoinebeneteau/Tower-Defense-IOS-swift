@@ -15,10 +15,10 @@ class LevelSelectorNode: SKNode {
 	}
 	
 	var worldNumberTitle: SKSpriteNode {
-		return self.childNodeWithName("worldNumber") as! SKSpriteNode
+		return self.childNode(withName: "worldNumber") as! SKSpriteNode
 	}
 	var barTitle: SKSpriteNode {
-		return self.childNodeWithName("barTitle") as! SKSpriteNode
+		return self.childNode(withName: "barTitle") as! SKSpriteNode
 	}
 	
 	func show() {
@@ -31,11 +31,11 @@ class LevelSelectorNode: SKNode {
 	}
 	
 	func hide() {
-		let actionFadeOut = SKAction.fadeAlphaTo(0.0, duration: 0.3)
-		let actionPop = SKAction.runBlock { () -> Void in
+		let actionFadeOut = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
+		let actionPop = SKAction.run { () -> Void in
 			self.removeFromParent()
 		}
 		let action = SKAction.sequence([actionFadeOut, actionPop])
-		self.runAction(action)
+		self.run(action)
 	}
 }

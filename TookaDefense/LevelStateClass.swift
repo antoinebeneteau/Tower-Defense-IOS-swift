@@ -11,11 +11,11 @@ import GameplayKit
 import SpriteKit
 
 class GameSceneLevelSelector: GameSceneState {
-	override func didEnterWithPreviousState(previousState: GKState?) {
+	override func didEnter(from previousState: GKState?) {
 		showReady(false)
 		showLevelSelector(true)
 	}
-	override func isValidNextState(stateClass: AnyClass) -> Bool {
+	override func isValidNextState(_ stateClass: AnyClass) -> Bool {
 		return stateClass == GameSceneActiveState.self
 	}
 }

@@ -11,19 +11,19 @@ import GameplayKit
 import SpriteKit
 
 class GameSceneWinState: GameSceneState {
-	override func didEnterWithPreviousState(previousState: GKState?) {
+	override func didEnter(from previousState: GKState?) {
 		showWin()
 	}
-	override func isValidNextState(stateClass: AnyClass) -> Bool {
+	override func isValidNextState(_ stateClass: AnyClass) -> Bool {
 		return stateClass == GameSceneReadyState.self
 	}
 }
 
 class GameSceneLoseState: GameSceneState {
-	override func didEnterWithPreviousState(previousState: GKState?) {
+	override func didEnter(from previousState: GKState?) {
 		showLose()
 	}
-	override func isValidNextState(stateClass: AnyClass) -> Bool {
+	override func isValidNextState(_ stateClass: AnyClass) -> Bool {
 		return stateClass == GameSceneReadyState.self
 	}
 }

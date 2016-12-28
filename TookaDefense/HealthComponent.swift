@@ -13,8 +13,8 @@ class HealthComponent: GKComponent {
 	
 	let fullHealth: Int
 	var health: Int
-	let healthBarFullWidth: CGFloat
-	let healthBar: SKShapeNode
+	var healthBarFullWidth: CGFloat
+	var healthBar: SKShapeNode
 	
 	let soundAction = SKAction.playSoundFileNamed("Hit.mp3", waitForCompletion: false)
 	
@@ -24,22 +24,29 @@ class HealthComponent: GKComponent {
 		self.health = health
 		
 		healthBarFullWidth = barWidth / 2
-		healthBar = SKShapeNode(path: UIBezierPath(rect: CGRect(x: parentNode.position.x - barWidth / 2, y: parentNode.position.x, width: barWidth / 2, height: 3)).CGPath, centered: true)
-		healthBar.fillColor = UIColor.greenColor()
-		healthBar.strokeColor = UIColor.greenColor()
-		healthBar.position = CGPointMake(parentNode.position.x, parentNode.position.y + 25)
+		healthBar = SKShapeNode(path: UIBezierPath(rect: CGRect(x: parentNode.position.x - barWidth / 2, y: parentNode.position.x, width: barWidth / 2, height: 3)).cgPath, centered: true)
+		
+		healthBar.fillColor = UIColor.green
+		healthBar.strokeColor = UIColor.green
+		healthBar.position = CGPoint(x: parentNode.position.x, y: parentNode.position.y + 25)
 		parentNode.addChild(healthBar)
 		
-		healthBar.hidden = true
+		healthBar.isHidden = true
+		
+		super.init()
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
 	}
 	
-	func takeDamage(damage: Int) -> Bool {
+	func takeDamage(_ damage: Int) -> Bool {
 		health = max(health - damage, 0)
 		
-		healthBar.hidden = false
+		healthBar.isHidden = false
 		let healthScale = CGFloat(health)/CGFloat(fullHealth)
-		let scaleAction = SKAction.scaleXTo(healthScale, duration: 0.5)
-		healthBar.runAction(SKAction.group([soundAction, scaleAction]))
+		let scaleAction = SKAction.scaleX(to: healthScale, duration: 0.5)
+		healthBar.run(SKAction.group([soundAction, scaleAction]))
 		return health == 0
 	}
 	

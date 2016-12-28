@@ -14,11 +14,11 @@ class TowerSelectorNode: SKNode {
 	var hideAction = SKAction()
 	
 	var costLabel: SKLabelNode {
-		return self.childNodeWithName("CostLabel") as! SKLabelNode
+		return self.childNode(withName: "CostLabel") as! SKLabelNode
 	}
 	
 	var towerIcon: SKSpriteNode {
-		return self.childNodeWithName("TowerIcon") as! SKSpriteNode
+		return self.childNode(withName: "TowerIcon") as! SKSpriteNode
 	}
 	
 	override init() {
@@ -29,18 +29,18 @@ class TowerSelectorNode: SKNode {
 		super.init(coder: aDecoder)
 	}
 	
-	func setTower(towerType: TowerType, pointForSelection: CGPoint) {
+	func setTower(_ towerType: TowerType, pointForSelection: CGPoint) {
 		towerIcon.texture = SKTexture(imageNamed: towerType.rawValue)
 		towerIcon.name = "Tower_Icon_\(towerType.rawValue)"
 		costLabel.text = "\(towerType.cost)"
 		
-		let moveAction = SKAction.moveByX(pointForSelection.x, y: pointForSelection.y, duration: 0.2)
+		let moveAction = SKAction.moveBy(x: pointForSelection.x, y: pointForSelection.y, duration: 0.2)
 		
 		showAction = SKAction.group([moveAction])
-		hideAction = showAction.reversedAction()
+		hideAction = showAction.reversed()
 	}
 	
-	func setTowerSell(towerTypeToSell: TowerType, towerType: TowerType, pointForSelection: CGPoint) {
+	func setTowerSell(_ towerTypeToSell: TowerType, towerType: TowerType, pointForSelection: CGPoint) {
 		towerIcon.texture = SKTexture(imageNamed: towerType.rawValue)
 		towerIcon.name = "Tower_Icon_\(towerType.rawValue)"
 		
@@ -54,19 +54,19 @@ class TowerSelectorNode: SKNode {
 				costLabel.text = "+\(abs(costAfterSell))"
 			}
 		}
-		let moveAction = SKAction.moveByX(pointForSelection.x, y: pointForSelection.y, duration: 0.2)
+		let moveAction = SKAction.moveBy(x: pointForSelection.x, y: pointForSelection.y, duration: 0.2)
 		
 		showAction = SKAction.group([moveAction])
-		hideAction = showAction.reversedAction()
+		hideAction = showAction.reversed()
 	}
 	
 	func show() {
-		self.runAction(showAction)
+		self.run(showAction)
 	}
 	
-	func hide(completion: () -> ()) {
-		self.runAction(SKAction.sequence([
-			hideAction, SKAction.runBlock(completion)]))
+	func hide(_ completion: @escaping () -> ()) {
+		self.run(SKAction.sequence([
+			hideAction, SKAction.run(completion)]))
 	}
 	
 }
