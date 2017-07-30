@@ -1,6 +1,5 @@
 [![Platform](https://img.shields.io/badge/platform-iOS-000000.svg)](http://cocoadocs.org/docsets)
 [![Language](https://img.shields.io/badge/language-Swift-orange.svg)](https://developer.apple.com/swift/)
-[![License](https://img.shields.io/badge/license-MIT%20License-lightgrey.svg)](https://github.com/tastyapp/tookadefense/blob/master/LICENSE)
 
 # TookaDefenseIOS
 <p align="center"><img src="http://image.noelshack.com/fichiers/2016/01/1452206333-capture-d-ecran-2016-01-07-a-23-33-25.png"></p>
